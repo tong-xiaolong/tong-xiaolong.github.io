@@ -12,17 +12,18 @@
       text-align: center;
       padding: 30px;
       color: #333;
+      margin: 0;
     }
 
     h1 {
-      font-size: 2.5em; /* 调整标题字体大小 */
+      font-size: 3em; /* 调整标题字体大小 */
       color: #444;
       margin-bottom: 10px;
     }
 
     h3 {
       margin: 10px;
-      font-size: 1.2em; /* 调整剩余步数的字体大小 */
+      font-size: 1.5em; /* 调整剩余步数的字体大小 */
     }
 
     #grid {
@@ -54,7 +55,7 @@
 
     button {
       margin: 10px;
-      padding: 10px 20px;
+      padding: 12px 24px;
       background: linear-gradient(to right, #4CAF50, #45A049);
       color: white;
       font-size: 1.2em; /* 调整按钮字体大小 */
@@ -78,19 +79,74 @@
     }
 
     /* 响应式设计 */
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
       h1 {
-        font-size: 2em; /* 在小屏幕上调整标题字体 */
+        font-size: 2.5em; /* 在平板上调整标题字体 */
+      }
+
+      h3 {
+        font-size: 1.3em; /* 在平板上调整步数字体 */
       }
 
       button {
-        font-size: 1em; /* 在小屏幕上调整按钮字体 */
+        font-size: 1.1em; /* 在平板上调整按钮字体 */
+        padding: 10px 20px; /* 缩小按钮尺寸 */
+      }
+
+      #steps {
+        font-size: 1.1em; /* 调整步数显示字体 */
+        padding: 6px 12px;
+      }
+
+      td {
+        width: 20vw; /* 适当增大单元格宽度以适应屏幕 */
+        height: 20vw; /* 适当增大单元格高度 */
+      }
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2em; /* 在手机屏幕上调整标题字体 */
+      }
+
+      h3 {
+        font-size: 1.2em; /* 在手机屏幕上调整步数字体 */
+      }
+
+      button {
+        font-size: 1em; /* 在手机屏幕上调整按钮字体 */
         padding: 8px 16px; /* 缩小按钮尺寸 */
       }
 
       #steps {
         font-size: 1em; /* 调整步数显示字体 */
         padding: 6px 12px;
+      }
+
+      td {
+        width: 22vw; /* 在手机上适当增大单元格宽度 */
+        height: 22vw; /* 在手机上适当增大单元格高度 */
+      }
+    }
+
+    /* 针对桌面（大于768px宽度的设备）优化 */
+    @media (min-width: 769px) {
+      td {
+        width: 80px; /* 固定尺寸，适合电脑屏幕 */
+        height: 80px; /* 固定尺寸，适合电脑屏幕 */
+      }
+
+      h1 {
+        font-size: 2.5em; /* 调整标题字体大小以适应屏幕 */
+      }
+
+      button {
+        font-size: 1em; /* 调整按钮字体大小 */
+        padding: 10px 20px; /* 适当调整按钮大小 */
+      }
+
+      #steps {
+        font-size: 1.1em; /* 调整步数显示字体 */
       }
     }
   </style>
