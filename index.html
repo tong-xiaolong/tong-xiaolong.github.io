@@ -1,210 +1,178 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    
-    <title>Ananke: Un thème pour Hugo | 年年有余</title>
-    <meta name="viewport" content="width=device-width,minimum-scale=1">
-    <meta name="description" content="Le dernier thème dont vous aurez besoin. Peut-être">
-    <meta name="generator" content="Hugo 0.145.0">
-    
-    
-    
-      <meta name="robots" content="index, follow">
-    
-    <meta name="author" content="Tgg lg">
-    
+<html lang="en">
 
-    
-<link rel="stylesheet" href="/ananke/css/main.min.d05fb5f317fcf33b3a52936399bdf6f47dc776516e1692e412ec7d76f4a5faa2.css" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- 使页面适配手机屏幕 -->
+  <title>Lights Out Game</title>
+  <style>
+    body {
+      background: #f5f5f5;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 30px;
+      color: #333;
+    }
 
+    h1 {
+      font-size: 2.5em; /* 调整标题字体大小 */
+      color: #444;
+      margin-bottom: 10px;
+    }
 
+    h3 {
+      margin: 10px;
+      font-size: 1.2em; /* 调整剩余步数的字体大小 */
+    }
 
+    #grid {
+      margin: 20px auto;
+      border-collapse: collapse;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+      overflow: hidden;
+    }
 
-    
+    td {
+      width: 16vw; /* 使用视口宽度进行适配 */
+      height: 16vw; /* 使用视口宽度进行适配 */
+      border: 1px solid #ccc;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
 
-    
-      
-<link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
+    .on {
+      background: #ffd600;
+      box-shadow: inset 0 0 10px #e0a800;
+    }
 
+    .off {
+      background: #333;
+      box-shadow: inset 0 0 10px #000;
+    }
 
-    
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      background: linear-gradient(to right, #4CAF50, #45A049);
+      color: white;
+      font-size: 1.2em; /* 调整按钮字体大小 */
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
 
-    
-    
-      <link href="/index.xml" rel="alternate" type="application/rss+xml" title="年年有余" />
-      <link href="/index.xml" rel="feed" type="application/rss+xml" title="年年有余" />
-      
-    
+    button:hover {
+      background: linear-gradient(to right, #45A049, #4CAF50);
+    }
 
-    
-      <link rel="canonical" href="https://tong-xiaolong.github.io/">
-    
+    #steps {
+      font-size: 1.2em;
+      background: #fff;
+      padding: 8px 16px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      display: inline-block;
+    }
 
-    <meta property="og:url" content="https://tong-xiaolong.github.io/">
-  <meta property="og:site_name" content="年年有余">
-  <meta property="og:title" content="Ananke: Un thème pour Hugo">
-  <meta property="og:description" content="Le dernier thème dont vous aurez besoin. Peut-être">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="website">
+    /* 响应式设计 */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2em; /* 在小屏幕上调整标题字体 */
+      }
 
-  <meta itemprop="name" content="Ananke: Un thème pour Hugo">
-  <meta itemprop="description" content="Le dernier thème dont vous aurez besoin. Peut-être">
-  <meta itemprop="datePublished" content="2017-04-09T10:58:08-04:00">
-  <meta itemprop="dateModified" content="2017-04-09T10:58:08-04:00">
-  <meta itemprop="wordCount" content="25">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Ananke: Un thème pour Hugo">
-  <meta name="twitter:description" content="Le dernier thème dont vous aurez besoin. Peut-être">
+      button {
+        font-size: 1em; /* 在小屏幕上调整按钮字体 */
+        padding: 8px 16px; /* 缩小按钮尺寸 */
+      }
 
-      
-    
-	
-  </head><body class="ma0 avenir bg-near-white production">
+      #steps {
+        font-size: 1em; /* 调整步数显示字体 */
+        padding: 6px 12px;
+      }
+    }
+  </style>
+</head>
 
-    
+<body>
+  <h1>💡 关灯游戏</h1>
+  <h3 id="steps">剩余步数: 100</h3>
+  <table id="grid"></table>
 
-  
-  
-  <header class="cover bg-top" style="background-image: url('https://tong-xiaolong.github.io/images/design-01jpvsgnke-1742542050.jpg');">
-    
-    <div class="bg-black-60">
-      <nav class="pv3 ph3 ph4-ns" role="navigation">
-  <div class="flex-l justify-between items-center center">
-    <a href="/" class="f3 fw2 hover-white no-underline white-90 dib">
-      
-        年年有余
-      
-    </a>
-    <div class="flex-l items-center">
-      
+  <button onclick="reset()">重新开始</button>
 
-      
-        <ul class="pl0 mr3">
-          
-          <li class="list f5 f4-ns fw4 dib pr3">
-            <a class="hover-white no-underline white-90" href="/about/" title="关于 页">
-              关于
-            </a>
-          </li>
-          
-          <li class="list f5 f4-ns fw4 dib pr3">
-            <a class="hover-white no-underline white-90" href="/post/" title="文章 页">
-              文章
-            </a>
-          </li>
-          
-          <li class="list f5 f4-ns fw4 dib pr3">
-            <a class="hover-white no-underline white-90" href="/contact/" title="随笔 页">
-              随笔
-            </a>
-          </li>
-          
-        </ul>
-      
-      <div class="ananke-socials"><a href="https://www.facebook.com/patrick.kollitsch" target="_blank" rel="noopener"
-        class="ananke-social-link link-transition facebook link dib z-999 pt3 pt0-l mr1"
-        title="follow on Facebook - Opens in a new window"
-        aria-label="follow on Facebook - Opens in a new window">
-      <span class="icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path d="M512 256C512 114.6 397.4 0 256 0S0 114.6 0 256C0 376 82.7 476.8 194.2 504.5V334.2H141.4V256h52.8V222.3c0-87.1 39.4-127.5 125-127.5c16.2 0 44.2 3.2 55.7 6.4V172c-6-.6-16.5-1-29.6-1c-42 0-58.2 15.9-58.2 57.2V256h83.6l-14.4 78.2H287V510.1C413.8 494.8 512 386.9 512 256h0z"/></svg>
-            
-          </span></a></div>
+  <script>
+    const size = 5;
+    let grid = [];
+    let steps = 100; // Updated steps to 100
 
-    </div>
-  </div>
-</nav>
+    function createGrid() {
+      const table = document.getElementById('grid');
+      table.innerHTML = '';
+      grid = [];
+      steps = 100; // Reset steps for each game
+      document.getElementById('steps').innerText = `剩余步数: ${steps}`;
 
-      <div class="tc-l pv4 pv6-l ph3 ph4-ns">
-        <h1 class="f2 f-subheadline-l fw2 white-90 mb0 lh-title">
-          Ananke: Un thème pour Hugo
-        </h1>
-        
-          <h2 class="fw1 f5 f3-l white-80 measure-wide-l center mt3">
-            Le dernier thème dont vous aurez besoin. Peut-être
-          </h2>
-        
-      </div>
-    </div>
-  </header>
+      // Set a low difficulty for the initial grid: 20% chance of light on
+      const difficulty = 0.2;
+      for (let i = 0; i < size; i++) {
+        const row = [];
+        const tr = document.createElement('tr');
+        for (let j = 0; j < size; j++) {
+          const td = document.createElement('td');
+          td.onclick = () => toggle(i, j);
+          tr.appendChild(td);
+          row.push(Math.random() < difficulty);
+        }
+        table.appendChild(tr);
+        grid.push(row);
+      }
+      render();
+    }
 
+    function toggle(x, y) {
+      if (steps <= 0) {
+        alert('❌ Game Over! No more steps remaining.');
+        return;
+      }
+      steps--;
+      document.getElementById('steps').innerText = `剩余步数: ${steps}`;
 
-    <main class="pb7" role="main">
-      
-  <article class="cf ph3 ph5-l pv3 pv4-l f4 tc-l center measure-wide lh-copy mid-gray">
-    <p>Bienvenue sur mon blog à propos de mon travail du moment. Je travaille sur une idée de livre. Vous pouvez lire quelques chapitres plus bas.</p>
+      // Toggle the clicked cell and its neighbors
+      [[0, 0], [0, 1], [0, -1], [1, 0], [-1, 0]].forEach(([dx, dy]) => {
+        const nx = x + dx, ny = y + dy;
+        if (nx >= 0 && ny >= 0 && nx < size && ny < size) grid[nx][ny] = !grid[nx][ny];
+      });
 
-  </article>
+      render();
+      if (checkWin()) {
+        setTimeout(() => alert(`🎉 You win! Total Steps: ${100 - steps}`), 200);
+      } else if (steps === 0) {
+        alert('❌ Game Over! You ran out of steps!');
+      }
+    }
 
-  
-  
-  
-  
-  
+    function render() {
+      const table = document.getElementById('grid');
+      [...table.rows].forEach((tr, i) => {
+        [...tr.cells].forEach((td, j) => {
+          td.className = grid[i][j] ? 'on' : 'off';
+        });
+      });
+    }
 
-  
-    <div class="pa3 pa4-ns w-100 w-70-ns center">
-      
+    function checkWin() {
+      return grid.every(row => row.every(cell => !cell)); // All lights turned off
+    }
 
-      <section class="w-100 mw8">
-        
-        
-          <div class="relative w-100 mb4">
-            
-<article class="bb b--black-10">
-  <div class="db pv4 ph3 ph0-l no-underline dark-gray">
-    <div class="flex flex-column flex-row-ns">
-      
-          
-        <div class="pr3-ns mb4 mb0-ns w-100 w-40-ns">
-          <a href="/post/chapter-1/" class="db grow">
-            <img src="https://tong-xiaolong.github.io/images/Pope-Edouard-de-Beaumont-1844.jpg" class="img" alt="image from Chapitre I: La grande halle">
-          </a>
-        </div>
-      
-      <div class="blah w-100 w-60-ns pl3-ns">
-        <h1 class="f3 fw1 athelas mt0 lh-title">
-          <a href="/post/chapter-1/" class="color-inherit dim link">
-            Chapitre I: La grande halle
-            </a>
-        </h1>
-        <div class="f6 f5-l lh-copy nested-copy-line-height nested-links">
-          <p>Généralement, on utilise un texte en faux latin (le texte ne veut rien dire, il a été modifié), le Lorem ipsum ou Lipsum, qui permet donc de faire office de texte d&rsquo;attente. L&rsquo;avantage de le mettre en latin est que l&rsquo;opérateur sait au premier coup d&rsquo;oeil que la page contenant ces lignes n&rsquo;est pas valide, et surtout l&rsquo;attention du client n&rsquo;est pas dérangée par le contenu, il demeure concentré seulement sur l&rsquo;aspect graphique.</p>
-        </div>
-        
-          <p class="f6 lh-copy mv0">By Tgg lg</p><a href="/post/chapter-1/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">继续阅读</a>
-      </div>
-    </div>
-  </div>
-</article>
+    function reset() {
+      createGrid();
+    }
 
-          </div>
-        
-      </section>
+    createGrid();
+  </script>
+</body>
 
-      
-
-    </div>
-  
-
-    </main>
-    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
-  <div class="flex justify-between">
-  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://tong-xiaolong.github.io/" >
-    &copy;  年年有余 2025 
-  </a>
-    <div><div class="ananke-socials"><a href="https://www.facebook.com/patrick.kollitsch" target="_blank" rel="noopener"
-        class="ananke-social-link link-transition facebook link dib z-999 pt3 pt0-l mr1"
-        title="follow on Facebook - Opens in a new window"
-        aria-label="follow on Facebook - Opens in a new window">
-      <span class="icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path d="M512 256C512 114.6 397.4 0 256 0S0 114.6 0 256C0 376 82.7 476.8 194.2 504.5V334.2H141.4V256h52.8V222.3c0-87.1 39.4-127.5 125-127.5c16.2 0 44.2 3.2 55.7 6.4V172c-6-.6-16.5-1-29.6-1c-42 0-58.2 15.9-58.2 57.2V256h83.6l-14.4 78.2H287V510.1C413.8 494.8 512 386.9 512 256h0z"/></svg>
-            
-          </span></a></div>
-</div>
-  </div>
-</footer>
-
-  </body>
 </html>
